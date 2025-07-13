@@ -1,0 +1,73 @@
+ #Equations for the network in Fig-1D, Table 2 (row 2).
+#Simulations in Fig-7(E-F) 
+
+#	R15:		TC + e5 <----> C1			r15 = (kf15*TC*e5) - (kb15*C1)
+#	R16:		TC + e2B <---> C2			r16 = (kf16*TC*e2B) - (kb16*C2)
+#	R17:		C2 + e5 <-----> C1 + e2B		r17 = (kf17*C2*e5) - (kb17*C1*e2B)
+				 
+
+# Conservation relations
+
+
+e2B = e2Bt - (C2)
+e5 = e5t - (C1)
+TC = TCt - (C1 + C2 )
+
+
+
+
+# Rate of reactions
+
+######### Module 2 ################
+
+r15 = (kf15*TC*e5) - (kb15*C1)
+r16 = (kf16*TC*e2B) - (kb16*C2)
+r17 = (kf17*C2*e5) - (kb17*C1*e2B)
+
+
+
+#Parameters 
+
+
+par e2Bt=5000, e5t=100, TCt=310
+############ Secondary mechanism  ######################
+
+param kf15 =	21.2517
+param kb15 =	1.19315
+param kf16=	15.1547
+param kb16=	673.581
+param kf17 =	1139.9
+param kb17 =	0.384145
+
+
+
+
+# ODE's 
+
+C2'= r16-r17
+C1' = r15+r17
+
+#auxiliaries
+aux e2B=e2B
+aux TC=TC
+aux e5=e5
+
+aux e2Btotal = e2B + (C2 )
+aux e5total = e5 + (C1)
+aux TCtotal = TC + (C1 + C2)
+
+
+# XPP settings
+@ meth=cvode, tol=1e-3,atol=1e-6, total=2000
+@ bounds=10000000000, xp=t,  yp=C2
+@ xlo=0, xhi=200, ylo=0, yhi=200
+
+#AUTO settings
+@ parmin=0, parmax=5000
+@ autoxmin=0, autoymin=0, autoxmax=2 autoymax=30
+@ Nmax=20000, Ds=-0.02, dsmin=0.001, dsmax=0.5, Normmax=10000
+ 
+
+done
+
+

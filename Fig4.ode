@@ -1,0 +1,189 @@
+#Equations for the network in Fig-4, Table 2 (row 6).
+#Simulations in Fig-5, Fig-6, and Fig-7(D-F) 
+
+
+#  	R1:  	     	e2 + GDP <-----> e2GDP        		r1 = (kf1*e2*GDP) - (kb1*e2GDP)
+#	R2:		e2GDP + e5 <------> Ce1			r2 = (kf2*e2GDP*e5) - (kb2*Ce1)	
+#	R3:		e2GDP + e2B <-----> Ce2			r3 = (kf3*e2GDP*e2B) - (kb3*Ce2)
+#	R4:		Ce1 + e2B <----> Ce2 + e5		r4 = (kf4*Ce1*e2B) - (kb4*Ce2*e5)
+#	R5:		e2GDP + kin <-----> e2kin		r5 = (kf5*e2GDP*kin) - (kb5*e2kin)
+#	R6:		e2kin ---------> e2pGDP + kin		r6 = (kf6*e2kin)
+#	R7:		e2pGDP + PP <-----> e2pPP		r7 = (kf7*e2pGDP*PP) - (kb7*e2pPP)
+#	R8:		e2pPP ---------> e2GDP + PP		r8 = (kf8*e2pPP)
+#	R9:		e2pGDP + e5 <-----> Ce3p		r9 = (kf9*e2pGDP*e5) - (kb9*Ce3p)
+#	R10:		e2pGDP + e2B <----> Ce4p		r10 = (kf10*e2pGDP*e2B) - (kb10*Ce4p)
+#	R11:		Ce3p + e2B <---> Ce4p + e5		r11 = (kf11*Ce3p*e2B) - (kb11*Ce4p*e5) 
+
+#	R12:		Ce2  <-----> e2e2B + GDP		r12 = (kf12*Ce2) - (kb12*e2e2B*GDP)
+#	R13:  	        e2e2B + GTP <----> e2GTP + e2B   	r13 = (kf13*e2e2B*GTP) - (kb13*e2GTP*e2B)
+#  	R14:    	tR + e2GTP <-------> TC      		r14 = (kf14*tR*e2GTP) - (kb14*TC)
+
+#	R15:		TC + e5 <----> C1			r15 = (kf15*TC*e5) - (kb15*C1)
+#	R16:		TC + e2B <---> C2			r16 = (kf16*TC*e2B) - (kb16*C2)
+#	R17:		C2 + e5 <-----> C1 + e2B		r17 = (kf17*C2*e5) - (kb17*C1*e2B)
+#	R18:		TC + kin <---> TCkin			r18 = (kf18*TC*kin) - (kb18*TCkin)
+#	R19:		TCkin ---------> TCp + kin		r19 = (kf19*TCkin)
+#	R20:		TCp + PP <------> TCpPP			r20 = (kf20*TCp*PP) - (kb20*TCpPP)
+#	R21:		TCpPP ----------> TC + PP		r21 = (kf21*TCpPP)
+#	R22:		TCp + e5 <-----> C3p			r22 = (kf22*TCp*e5) - (kb22*C3p)
+#	R23:		TCp + e2B <----> C4p			r23 = (kf23*TCp*e2B) - (kb23*C4p)
+#	R24:		C3p + e2B <---> C4p + e5		r24 = (kf24*C3p*e2B) - (kb24*C4p*e5)
+
+
+				 
+
+# Conservation relations
+
+kin = kint - (TCkin + e2kin)
+tR = tRt - (C1 + C2 + C3p + C4p + TCkin + TCp + TCpPP + TC )
+GTP = GTPt - (C1 + C2 + C3p + C4p + TCkin + TCp + TCpPP + TC + e2GTP)
+PP = PPt - (TCpPP + e2pPP)
+e2B = e2Bt - (C2 + C4p + Ce2 + Ce4p + e2e2B)
+e5 = e5t - (C1 + C3p + Ce1 + Ce3p)
+GDP = GDPt - (Ce1 + Ce2 + Ce3p + Ce4p + e2GDP + e2kin + e2pGDP + e2pPP)
+e2 = e2t - (C1 + C2 + C3p + C4p + Ce1 + Ce2 + Ce3p + Ce4p + TCkin + TCp + TCpPP + TC + e2GDP + e2GTP + e2e2B + e2kin + e2pGDP + e2pPP)
+
+
+
+
+# Rate of reactions
+############# Module 1 #################
+r1 = (kf1*e2*GDP) - (kb1*e2GDP)
+r2 = (kf2*e2GDP*e5) - (kb2*Ce1)
+r3 = (kf3*e2GDP*e2B) - (kb3*Ce2)
+r4 = (kf4*Ce1*e2B) - (kb4*Ce2*e5)
+r5 = (kf5*e2GDP*kin) - (kb5*e2kin)
+r6 = (kf6*e2kin)
+r7 = (kf7*e2pGDP*PP) - (kb7*e2pPP)
+r8 = (kf8*e2pPP)
+r9 = (kf9*e2pGDP*e5) - (kb9*Ce3p)
+r10 = (kf10*e2pGDP*e2B) - (kb10*Ce4p)
+r11 = (kf11*Ce3p*e2B) - (kb11*Ce4p*e5)
+
+
+######### Module 2 ################
+
+r15 = (kf15*TC*e5) - (kb15*C1)
+r16 = (kf16*TC*e2B) - (kb16*C2)
+r17 = (kf17*C2*e5) - (kb17*C1*e2B)
+r18 = (kf18*TC*kin) - (kb18*TCkin)
+r19 = (kf19*TCkin)
+r20 = (kf20*TCp*PP) - (kb20*TCpPP)
+r21 = (kf21*TCpPP)
+r22 = (kf22*TCp*e5) - (kb22*C3p)
+r23 = (kf23*TCp*e2B) - (kb23*C4p)
+r24 = (kf24*C3p*e2B) - (kb24*C4p*e5)
+
+
+############ Module 3 ################
+r12 = (kf12*Ce2) - (kb12*e2e2B*GDP)
+r13 = (kf13*e2e2B*GTP) - (kb13*e2GTP*e2B)
+r14 = (kf14*tR*e2GTP) - (kb14*TC)
+
+
+#Parameters 
+
+
+par kint=0, e2Bt=53, PPt=24, e5t=100, e2t=310, tRt=310, GTPt = 1500, GDPt=1510
+
+
+
+
+param kf1 =	1.73208
+param kb1 =	0.315638
+param kf2 =	0.000579104
+param kb2 =	0.70668
+param kf3=	18.0568
+param kb3=	483.309
+param kf4 =	1.2064
+param kb4 =	727.084
+param kf5 =	2.67712
+param kb5 =	5.51191
+param kf6 =	5.81829
+param kf7 =	19.0475
+param kb7 =	0.0979308
+param kf8 =	0.0250067
+param kf9 =	28.5088
+param kb9 =	0.023318
+param kf10=	20
+param kb10=	80
+param kf11 =	297.821
+param kb11 =	440.862
+param kf12 =	46.0705
+param kb12 =	0.42722
+param kf13 =	0.43298
+param kb13 =	0.010508
+param kf14=	1
+param kb14=	23.6952
+param kf15 =	21.2517
+param kb15 =	1.19315
+param kf16=	15.1547
+param kb16=	673.581
+param kf17 =	1139.9
+param kb17 =	0.384145
+param kf18 =	4.33712
+param kb18 =	6.51616
+param kf19 =	6.78319
+param kf20 =	3.22942
+param kb20 =	0.0183374
+param kf21 =	71.839
+param kf22 =	13.9358
+param kb22 =	0.717936
+param kf23=	6
+param kb23=	100
+param kf24 =	6457.02
+param kb24 =	114.886
+
+# ODE's 
+
+e2pGDP' = r6-r7-r9-r10
+Ce1' = r2-r4
+Ce2' = r3+r4-r12
+e2kin' = r5-r6
+e2pPP' = r7-r8
+Ce3p' = r9-r11
+Ce4p' = r10+r11
+e2e2B' = r12-r13 
+e2GTP' = r13-r14
+TCp'= r19-r20-r22-r23
+C1' = r15+r17
+C2'= r16-r17
+TCkin'= r18-r19
+TCpPP' = r20-r21
+C3p'= r22-r24
+C4p'= r23+r24
+TC' = r14-r15-r16-r18+r21 
+e2GDP' = -r2-r3-r5+r8+r1
+
+#auxiliaries
+aux kin=kin
+aux e2B=e2B
+aux e2=e2
+aux e5=e5
+aux tR=tR
+aux PP=PP
+aux GDP=GDP
+aux GTP=GTP
+
+aux kintotal = kin+ (TCkin + e2kin)
+aux tRtotal = tR + (C1 + C2 + C3p + C4p + TCkin + TCp + TCpPP + TC)
+aux GTPtotal = GTP + (C1 + C2 + C3p + C4p + TCkin + TCp + TCpPP + TC + e2GTP)
+aux PPtotal = PP + (TCpPP + e2pPP)
+aux e2Btotal = e2B + (C2 + C4p + Ce2 + Ce4p + e2e2B)
+aux e5total = e5 + (C1 + C3p + Ce1 + Ce3p)
+aux GDPtotal = GDP + (Ce1 + Ce2 + Ce3p + Ce4p + e2GDP + e2kin + e2pGDP + e2pPP)
+aux e2total = e2 + (C1 + C2 + C3p + C4p + Ce1 + Ce2 + Ce3p + Ce4p + TCkin + TCp + TCpPP + TC + e2GDP + e2GTP + e2e2B + e2kin + e2pGDP + e2pPP)
+
+
+# XPP settings
+@ meth=cvode, tol=1e-3,atol=1e-6, total=2000
+@ bounds=10000000000, xp=t,  yp=Ce1
+@ xlo=0, xhi=200, ylo=0, yhi=200
+
+#AUTO settings
+@ parmin=-10, parmax=1500
+@ autoxmin=0, autoymin=0, autoxmax=2 autoymax=30
+@ Nmax=20000, Ds=0.02, dsmin=0.001, dsmax=0.5, Normmax=10000
+ 
+
+done

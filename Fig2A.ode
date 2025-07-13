@@ -1,0 +1,128 @@
+#Equations for the network in Fig-2, Table 2 (row 3).
+#Simulations in Fig-2(B-D,F,G-I)
+#  	R1:  	     	e2 + GDP <-----> e2GDP        		r1 = (kf1*e2*GDP) - (kb1*e2GDP)
+#	R2:		e2GDP + e5 <------> Ce1			r2 = (kf2*e2GDP*e5) - (kb2*Ce1)	
+#	R3:		e2GDP + e2B <-----> Ce2			r3 = (kf3*e2GDP*e2B) - (kb3*Ce2)
+#	R4:		Ce1 + e2B <----> Ce2 + e5		r4 = (kf4*Ce1*e2B) - (kb4*Ce2*e5)
+
+#	R12:		Ce2  <-----> e2e2B + GDP		r12 = (kf12*Ce2) - (kb12*e2e2B*GDP)
+#	R13:  	        e2e2B + GTP <----> e2GTP + e2B   	r13 = (kf13*e2e2B*GTP) - (kb13*e2GTP*e2B)
+#  	R14:    	tR + e2GTP <-------> TC      		r14 = (kf14*tR*e2GTP) - (kb14*TC)
+
+#	R15:		TC + e5 <----> C1			r15 = (kf15*TC*e5) - (kb15*C1)
+#	R16:		TC + e2B <---> C2			r16 = (kf16*TC*e2B) - (kb16*C2)
+#	R17:		C2 + e5 <-----> C1 + e2B		r17 = (kf17*C2*e5) - (kb17*C1*e2B)
+
+
+# Conservation relations
+
+tR = tRt - (C1 + C2 + TC )
+GTP = GTPt - (C1 + C2  + TC + e2GTP)
+e2B = e2Bt - (C2 + Ce2  + e2e2B)
+e5 = e5t - (C1 + Ce1)
+GDP = GDPt - (Ce1 + Ce2 + e2GDP)
+e2 = e2t - (C1 + C2  + Ce1 + Ce2 + TC + e2GDP + e2GTP + e2e2B)
+
+
+
+
+
+# Rate of reactions
+############# Module 1 #################
+r1 = (kf1*e2*GDP) - (kb1*e2GDP)
+r2 = (kf2*e2GDP*e5) - (kb2*Ce1)
+r3 = (kf3*e2GDP*e2B) - (kb3*Ce2)
+r4 = (kf4*Ce1*e2B) - (kb4*Ce2*e5)
+
+######### Module 2 ################
+
+r15 = (kf15*TC*e5) - (kb15*C1)
+r16 = (kf16*TC*e2B) - (kb16*C2)
+r17 = (kf17*C2*e5) - (kb17*C1*e2B)
+
+
+############ Module 3 ################
+r12 = (kf12*Ce2) - (kb12*e2e2B*GDP)
+r13 = (kf13*e2e2B*GTP) - (kb13*e2GTP*e2B)
+r14 = (kf14*tR*e2GTP) - (kb14*TC)
+
+
+#Parameters 
+
+
+param e2Bt=1500,e5t=250, e2t=500, tRt=2500, GTPt = 1200, GDPt=40
+
+
+
+
+
+
+param kf1 = 0.00013
+param kb1 =	0.315638
+param kf2 =	0.000579104
+param kb2 =	0.70668
+param kf3=	18.0568
+param kb3=	483.309
+param kf4 =	1.2064
+param kb4 =	727.084
+
+
+
+param kf15= 0.06
+param kb15 =	1.19315
+param kf16=	15.1547
+param kb16=	673.581
+param kf17 =	1139.9
+param kb17 =	0.384145
+
+
+param kf12 =	46.0705
+param kb12 =	0.42722
+param kf13 =	0.43298
+param kb13= 1000
+param kf14=	1
+param kb14=	23.6952
+
+
+
+# ODE's 
+e2GTP' = r13-r14
+Ce1' = r2-r4
+Ce2' = r3+r4-r12
+e2e2B' = r12-r13 
+C1' = r15+r17
+C2'= r16-r17
+TC' = r14-r15-r16
+e2GDP' = -r2-r3+r1
+
+#auxiliaries
+aux e2B=e2B
+aux e2=e2
+aux e5=e5
+aux tR=tR
+aux GDP=GDP
+aux GTP=GTP
+
+aux tRtotal = tR + (C1 + C2 + TC)
+aux GTPtotal = GTP + (C1 + C2 + TC + e2GTP)
+aux e2Btotal = e2B + (C2 + Ce2 + e2e2B)
+aux e5total = e5 + (C1 + Ce1)
+aux GDPtotal = GDP + (Ce1 + Ce2 + e2GDP)
+aux e2total = e2 + (C1 + C2 + Ce1 + Ce2 + TC + e2GDP + e2GTP + e2e2B)
+
+
+# XPP settings
+@ meth=cvode, tol=1e-3,atol=1e-6, total=2000
+@ bounds=10000000000, xp=t,  yp=Ce1
+@ xlo=0, xhi=200, ylo=0, yhi=200
+
+#AUTO settings
+@ parmin=0, parmax=1500
+@ autoxmin=0, autoymin=0, autoxmax=2 autoymax=30
+@ Nmax=20000, Ds=-0.02, dsmin=0.001, dsmax=0.5, Normmax=10000
+ 
+
+done
+
+
+

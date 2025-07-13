@@ -1,0 +1,75 @@
+#Equations for the network in Fig-1(A), Table 2 (row 1).
+#Simulations in Fig-1(B & C)
+
+
+#  	R1:  	     	e2 + GDP <-----> e2GDP        		r1 = (kf1*e2*GDP) - (kb1*e2GDP)
+#	R2:		e2GDP + e5 <------> Ce1			r2 = (kf2*e2GDP*e5) - (kb2*Ce1)	
+#	R3:		e2GDP + e2B <-----> Ce2			r3 = (kf3*e2GDP*e2B) - (kb3*Ce2)
+#	R4:		Ce1 + e2B <----> Ce2 + e5		r4 = (kf4*Ce1*e2B) - (kb4*Ce2*e5)
+
+
+				 
+
+# Conservation relations
+
+e2B = e2Bt - (Ce2)
+e5 = e5t - (Ce1)
+GDP = GDPt - (Ce1 + Ce2 + e2GDP)
+e2 = e2t - (Ce1 + Ce2 + e2GDP)
+
+
+
+# Rate of reactions
+############# Module 1 #################
+r1 = (kf1*e2*GDP) - (kb1*e2GDP)
+r2 = (kf2*e2GDP*e5) - (kb2*Ce1)
+r3 = (kf3*e2GDP*e2B) - (kb3*Ce2)
+r4 = (kf4*Ce1*e2B) - (kb4*Ce2*e5)
+
+#Parameters 
+
+par e2Bt=1500, e5t=100, e2t=310, GDPt=1510
+
+param kf1 =	1.73208
+param kb1 =	0.315638
+param kf2 =	0.000579104
+param kb2 =	0.70668
+param kf3=	18.0568
+param kb3=	483.309
+param kf4 =	1.2064
+param kb4 =	727.084
+
+
+
+
+# ODE's 
+
+Ce1' = r2-r4
+Ce2' = r3+r4
+e2GDP' = -r2-r3+r1
+
+#auxiliaries
+aux e2B=e2B
+aux e2=e2
+aux e5=e5
+aux GDP=GDP
+
+aux e2Btotal = e2B + (Ce2)
+aux e5total = e5 + (Ce1)
+aux GDPtotal = GDP + (Ce1 + Ce2 + e2GDP)
+aux e2total = e2 + (Ce1 + Ce2 + e2GDP)
+
+
+# XPP settings
+@ meth=cvode, tol=1e-3,atol=1e-6, total=2000
+@ bounds=10000000000, xp=t,  yp=Ce2
+@ xlo=0, xhi=200, ylo=0, yhi=200
+
+#AUTO settings
+@ parmin=-10, parmax=5000
+@ autoxmin=0, autoymin=0, autoxmax=2 autoymax=30
+@ Nmax=20000, Ds=-0.02, dsmin=0.001, dsmax=0.5, Normmax=10000
+ 
+
+done
+

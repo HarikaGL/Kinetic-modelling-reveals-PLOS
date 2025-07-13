@@ -1,0 +1,115 @@
+#Equations for the network in Fig-3(A), Table 2 (row 4).
+#Simulations in Fig-3(B & C), and Fig-7(A-C)
+
+
+
+#  	R1:  	     	e2 + GDP <-----> e2GDP        		r1 = (kf1*e2*GDP) - (kb1*e2GDP)
+#	R2:		e2GDP + e5 <------> Ce1			r2 = (kf2*e2GDP*e5) - (kb2*Ce1)	
+#	R3:		e2GDP + e2B <-----> Ce2			r3 = (kf3*e2GDP*e2B) - (kb3*Ce2)
+#	R4:		Ce1 + e2B <----> Ce2 + e5		r4 = (kf4*Ce1*e2B) - (kb4*Ce2*e5)
+#	R5:		e2GDP + kin <-----> e2kin		r5 = (kf5*e2GDP*kin) - (kb5*e2kin)
+#	R6:		e2kin ---------> e2pGDP + kin		r6 = (kf6*e2kin)
+#	R7:		e2pGDP + PP <-----> e2pPP		r7 = (kf7*e2pGDP*PP) - (kb7*e2pPP)
+#	R8:		e2pPP ---------> e2GDP + PP		r8 = (kf8*e2pPP)
+#	R9:		e2pGDP + e5 <-----> Ce3p		r9 = (kf9*e2pGDP*e5) - (kb9*Ce3p)
+#	R10:		e2pGDP + e2B <----> Ce4p		r10 = (kf10*e2pGDP*e2B) - (kb10*Ce4p)
+#	R11:		Ce3p + e2B <---> Ce4p + e5		r11 = (kf11*Ce3p*e2B) - (kb11*Ce4p*e5) 
+
+				 
+
+# Conservation relations
+
+kin = kint - (e2kin)
+PP = PPt - (e2pPP)
+e2B = e2Bt - (Ce2 + Ce4p)
+e5 = e5t - (Ce1 + Ce3p)
+GDP = GDPt - (Ce1 + Ce2 + Ce3p + Ce4p + e2GDP + e2kin + e2pGDP + e2pPP)
+e2 = e2t - (Ce1 + Ce2 + Ce3p + Ce4p + e2GDP + e2kin + e2pGDP + e2pPP)
+
+
+
+# Rate of reactions
+############# Module 1 #################
+r1 = (kf1*e2*GDP) - (kb1*e2GDP)
+r2 = (kf2*e2GDP*e5) - (kb2*Ce1)
+r3 = (kf3*e2GDP*e2B) - (kb3*Ce2)
+r4 = (kf4*Ce1*e2B) - (kb4*Ce2*e5)
+r5 = (kf5*e2GDP*kin) - (kb5*e2kin)
+r6 = (kf6*e2kin)
+r7 = (kf7*e2pGDP*PP) - (kb7*e2pPP)
+r8 = (kf8*e2pPP)
+r9 = (kf9*e2pGDP*e5) - (kb9*Ce3p)
+r10 = (kf10*e2pGDP*e2B) - (kb10*Ce4p)
+r11 = (kf11*Ce3p*e2B) - (kb11*Ce4p*e5)
+
+
+#Parameters 
+
+
+param kint=0, e2Bt=2, PPt=3, e5t=35, e2t=55, GDPt=1260
+
+
+
+param kf1 =	1.73208
+param kb1 =	0.315638
+param kf2 =	0.000579104
+param kb2 =	0.70668
+param kf3=	18.0568
+param kb3=	483.309
+param kf4 =	1.2064
+param kb4 =	727.084
+param kf5 =	2.67712
+param kb5 =	5.51191
+param kf6 =	5.81829
+param kf7 =	19.0475
+param kb7 =	0.0979308
+param kf8= 500
+param kf9 =	28.5088
+param kb9 =	0.023318
+param kf10=	20
+param kb10=	80
+param kf11 =	297.821
+param kb11 = 80
+
+
+# ODE's 
+
+e2pGDP' = r6-r7-r9-r10
+Ce1' = r2-r4
+Ce2' = r3+r4
+e2kin' = r5-r6
+e2pPP' = r7-r8
+Ce3p' = r9-r11
+Ce4p' = r10+r11
+e2GDP' = -r2-r3-r5+r8+r1
+
+
+#auxiliaries
+aux kin=kin
+aux e2B=e2B
+aux e2=e2
+aux e5=e5
+aux PP=PP
+aux GDP=GDP
+
+aux kintotal = kin+ (e2kin)
+aux PPtotal = PP + (e2pPP)
+aux e2Btotal = e2B + (Ce2 + Ce4p)
+aux e5total = e5 + (Ce1 + Ce3p)
+aux GDPtotal = GDP + (Ce1 + Ce2 + Ce3p + Ce4p + e2GDP + e2kin + e2pGDP + e2pPP)
+aux e2total = e2 + (Ce1 + Ce2 + Ce3p + Ce4p + e2GDP + e2kin + e2pGDP + e2pPP)
+
+
+# XPP settings
+@ meth=cvode, tol=1e-3,atol=1e-6, total=2000
+@ bounds=10000000000, xp=t,  yp=Ce1
+@ xlo=0, xhi=200, ylo=0, yhi=200
+
+#AUTO settings
+@ parmin=-10, parmax=1500
+@ autoxmin=0, autoymin=0, autoxmax=2 autoymax=30
+@ Nmax=20000, Ds=0.02, dsmin=0.001, dsmax=0.5, Normmax=10000
+ 
+
+done
+
